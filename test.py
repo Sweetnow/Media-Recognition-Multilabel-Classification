@@ -7,9 +7,11 @@ from torch.utils.data import Dataset, DataLoader
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import model
+import dataset
 
 
-def test(model, loader, device,use_fivecrop):
+def test(model, loader, device, use_fivecrop):
     model.eval()
     correct = torch.zeros(20, dtype=torch.float).to(device)
     label_cnt = torch.zeros(20, dtype=torch.float).to(device)
@@ -52,3 +54,13 @@ def test(model, loader, device,use_fivecrop):
         correct.sum().item(), label_cnt.sum().item(),
         test_recall, correct.sum().item(), predict_cnt.sum().item(), test_precision))
     return mf1, test_recall, test_precision
+
+
+if __name__ == "__main__":
+    device = torch.device('cuda')
+    mymodel = model.ResNet50('none').to(device)
+    mymodel.load('./ResNet50_15005716.pt')
+    _, test_dataset = dataset.get_dataset('./dataset', False, False)
+    loader = DataLoader(test_dataset, 128, False,
+                        num_workers=4, pin_memory=True)
+    test(mymodel, loader, device, False)

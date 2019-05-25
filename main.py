@@ -50,7 +50,7 @@ def main():
         args.path, args.use_augmentation, args.use_fivecrop)
     train_loader = DataLoader(train_dataset, args.batch, True,
                               num_workers=args.worker, pin_memory=True)
-    test_loader = DataLoader(train_dataset, args.batch, False,
+    test_loader = DataLoader(test_dataset, args.batch, False,
                              num_workers=args.worker, pin_memory=True)
     if args.cuda:
         device = torch.device('cuda')
