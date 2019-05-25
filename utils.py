@@ -54,15 +54,5 @@ def load_log(log_file):
 
 
 if __name__ == '__main__':
-    import types
-
-    class Test():
-        def get_name(self):
-            return 'model_test'
-
-    model = Test()
-    train_losses, test_mf1s, test_precisions, test_recalls = [
-        1, 2, 3], [3, 2, 1], [4, 2, 1], [1, 3, 5]
-    save_log(model, train_losses, test_mf1s, test_precisions, test_recalls)
-    train_losses, test_mf1s, test_precisions, test_recalls = load_log(model)
-    show(train_losses, test_mf1s, test_precisions, test_recalls)
+    log = load_log('../model/DenseNet_184340.json')
+    show(*log)

@@ -75,7 +75,7 @@ class ResNet18(Model):
                 'frozen_layers must be `none` `fc` and `one_conv`')
 
 class ResNet34(Model):
-    def __init__(self, num_fc_layers, frozen_layers):
+    def __init__(self, frozen_layers):
         super().__init__('ResNet34')
         self.model = tv.models.resnet34(True)
         self.model.fc = nn.Sequential(nn.Linear(512, 20))
@@ -91,7 +91,7 @@ class ResNet34(Model):
                 'frozen_layers must be `none` `fc` and `one_conv`')
 
 class ResNet50(Model):
-    def __init__(self, num_fc_layers, frozen_layers):
+    def __init__(self, frozen_layers):
         super().__init__('ResNet50')
         self.model = tv.models.resnet50(True)
         self.model.fc = nn.Sequential(nn.Linear(2048, 20))

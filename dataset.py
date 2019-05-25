@@ -23,9 +23,7 @@ class PascalVOCDataset(Dataset):
             os.path.join(root_dir, PascalVOCDataset.annotations_name), train)
 
     def __getitem__(self, index):
-        image_name = os.path.join(
-            self.root_dir, PascalVOCDataset.images_dir, self.images[index]+PascalVOCDataset.suffix)
-        image = Image.open(image_name)
+        image = self.get_raw_image(index)
         if self.transform:
             image = self.transform(image)
         sample = {'image': image, 'label': self.labels[index]}
@@ -33,6 +31,12 @@ class PascalVOCDataset(Dataset):
 
     def __len__(self):
         return len(self.images)
+
+    def get_raw_image(self, index):
+        image_name = os.path.join(
+            self.root_dir, PascalVOCDataset.images_dir, self.images[index]+PascalVOCDataset.suffix)
+        image = Image.open(image_name)
+        return image
 
     def __load_annotation(path, train=True):
         '''
