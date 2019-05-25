@@ -47,8 +47,8 @@ def save_log(model, train_losses, test_mF1s, test_precisions, test_recalls):
         dump(log, f)
 
 
-def load_log(model):
-    with open('{}.json'.format(model.get_name()), 'r') as f:
+def load_log(log_file):
+    with open(log_file, 'r') as f:
         log = load(f)
     return list(log.values())
 

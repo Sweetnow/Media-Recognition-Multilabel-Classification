@@ -52,31 +52,17 @@ class VGG16(Model):
 
 
 class DenseNet(Model):
-    def __init__(self, num_fc_layers):
+    def __init__(self):
         super().__init__('DenseNet')
         self.model = tv.models.densenet121(True)
-        if num_fc_layers == 1:
-            self.model.classifier = nn.Sequential(nn.Linear(1024, 20))
-        elif num_fc_layers == 2:
-            self.model.classifier = nn.Sequential(
-                nn.Linear(1024, 200), nn.ReLU(), nn.Linear(200, 20))
-            pass
-        else:
-            raise ValueError('num_fc_layers must be 1 or 2')
+        self.model.classifier = nn.Sequential(nn.Linear(1024, 20))
         self._freeze(1)
 
 class ResNet18(Model):
-    def __init__(self, num_fc_layers, frozen_layers):
+    def __init__(self, frozen_layers):
         super().__init__('ResNet18')
         self.model = tv.models.resnet18(True)
-        if num_fc_layers == 1:
-            self.model.fc = nn.Sequential(nn.Linear(512, 20))
-        elif num_fc_layers == 2:
-            self.model.fc = nn.Sequential(nn.Linear(512, 200),
-                                          nn.ReLU(),
-                                          nn.Linear(200, 20))
-        else:
-            raise ValueError('num_fc_layers must be 1 or 2')
+        self.model.fc = nn.Sequential(nn.Linear(512, 20))
         self.model.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         if frozen_layers == 'none':
             pass
@@ -92,14 +78,7 @@ class ResNet34(Model):
     def __init__(self, num_fc_layers, frozen_layers):
         super().__init__('ResNet34')
         self.model = tv.models.resnet34(True)
-        if num_fc_layers == 1:
-            self.model.fc = nn.Sequential(nn.Linear(512, 20))
-        elif num_fc_layers == 2:
-            self.model.fc = nn.Sequential(nn.Linear(512, 200),
-                                          nn.ReLU(),
-                                          nn.Linear(200, 20))
-        else:
-            raise ValueError('num_fc_layers must be 1 or 2')
+        self.model.fc = nn.Sequential(nn.Linear(512, 20))
         self.model.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         if frozen_layers == 'none':
             pass
@@ -115,14 +94,7 @@ class ResNet50(Model):
     def __init__(self, num_fc_layers, frozen_layers):
         super().__init__('ResNet50')
         self.model = tv.models.resnet50(True)
-        if num_fc_layers == 1:
-            self.model.fc = nn.Sequential(nn.Linear(2048, 20))
-        elif num_fc_layers == 2:
-            self.model.fc = nn.Sequential(nn.Linear(2048, 200),
-                                          nn.ReLU(),
-                                          nn.Linear(200, 20))
-        else:
-            raise ValueError('num_fc_layers must be 1 or 2')
+        self.model.fc = nn.Sequential(nn.Linear(2048, 20))
         self.model.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         if frozen_layers == 'none':
             pass

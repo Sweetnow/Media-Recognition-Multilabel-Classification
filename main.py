@@ -18,8 +18,6 @@ def parse_args():
                         help='root directory')
     parser.add_argument('--model', nargs='?', default='ResNet50',
                         help='Choose Model: ResNet18, ResNet34, ResNet50, DenseNet')
-    parser.add_argument('--num_fc_layers', nargs='?', type=int,
-                        default=1, help='Model num_fc_layers')
     parser.add_argument('--frozen_layers', nargs='?', default='fc',
                         help='Model frozen_layers')
     parser.add_argument('--lr', nargs='?', type=int,
@@ -59,16 +57,13 @@ def main():
     else:
         device = torch.device('cpu')
     if args.model == 'ResNet18':
-        mymodel = model.ResNet18(
-            args.num_fc_layers, args.frozen_layers).to(device)
+        mymodel = model.ResNet18(args.frozen_layers).to(device)
     elif args.model == 'ResNet34':
-        mymodel = model.ResNet34(
-            args.num_fc_layers, args.frozen_layers).to(device)
+        mymodel = model.ResNet34(args.frozen_layers).to(device)
     elif args.model == 'ResNet50':
-        mymodel = model.ResNet50(
-            args.num_fc_layers, args.frozen_layers).to(device)
+        mymodel = model.ResNet50(args.frozen_layers).to(device)
     elif args.model == 'DenseNet':
-        mymodel = model.DenseNet(args.num_fc_layers).to(device)
+        mymodel = model.DenseNet().to(device)
     else:
         pass
     op = optim.Adam(mymodel.parameters(), lr=args.lr)
