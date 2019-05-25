@@ -17,7 +17,7 @@ class Model(nn.Module):
         return '{}_{}'.format(self.name, num_params)
 
     def load(self, backup):
-        self.model.load_state_dict(torch.load(backup))
+        self.model.load_state_dict(torch.load(backup, map_location='cpu'))
 
     def save(self, backup):
         torch.save(self.model.state_dict(), backup)
@@ -58,6 +58,7 @@ class DenseNet(Model):
         self.model.classifier = nn.Sequential(nn.Linear(1024, 20))
         self._freeze(1)
 
+
 class ResNet18(Model):
     def __init__(self, frozen_layers):
         super().__init__('ResNet18')
@@ -74,6 +75,7 @@ class ResNet18(Model):
             raise ValueError(
                 'frozen_layers must be `none` `fc` and `one_conv`')
 
+
 class ResNet34(Model):
     def __init__(self, frozen_layers):
         super().__init__('ResNet34')
@@ -89,6 +91,7 @@ class ResNet34(Model):
         else:
             raise ValueError(
                 'frozen_layers must be `none` `fc` and `one_conv`')
+
 
 class ResNet50(Model):
     def __init__(self, frozen_layers):
