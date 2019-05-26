@@ -52,15 +52,6 @@ class PascalVOCDataset(Dataset):
         else:
             need_infos = list(
                 filter(lambda l: l[0][:4] in PascalVOCDataset.test_prefix, all_infos))
-        if train:
-            tmp = []
-            for l in need_infos:
-                if '0' in l:
-                    tmp.append(l)
-                else:
-                    tmp.append(l)
-                    tmp.append(l)
-            need_infos = tmp
         images = list(map(lambda l: l[0], need_infos))
         with torch.no_grad():
             indice_one_hot = torch.zeros(

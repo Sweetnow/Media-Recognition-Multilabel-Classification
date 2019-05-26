@@ -5,6 +5,7 @@ import model
 import matplotlib.pyplot as plt
 import dataset
 import torch
+from torch.utils.data import DataLoader
 
 classes = ['person',
            'bird',
@@ -30,37 +31,36 @@ classes = ['person',
 
 def demo():
     # load dataset and model
-    use_fivecrop = False
+    use_fivecrop = True
     device = torch.device('cuda')
     _, test_dataset = dataset.get_dataset('./dataset', False, use_fivecrop)
-    mymodel = model.ResNet50('none')
-    mymodel.load('../model/ResNet50_15005716ww.pt')
-    mymodel = mymodel.to(device)
+    mymodel = model.ResNet50('none').to(device)
+    mymodel.load('../model/ResNet50_15005716.pt')
+    mymodel.eval()
 
-    # index = 111    #person
-    while(True):
-        index=int(input('enter index:'))
-
+    while True:
+        index=int(input('enter index: '))
+        data = test_dataset[index]
         # process label
-        model_input = test_dataset[index]
-        image, label = model_input['image'].to(
-            device), model_input['label'].to(device)
-        label = (label > 0).to(torch.int).tolist()
+        image, label = data['image'].to(device), data['label'].to(device)
+        if not use_fivecrop:
+            image=image.unsqueeze(0)
+        model_out = mymodel(image).mean(0)
+
+
+        label = label.tolist()
         label_classes = []
         for i, v in enumerate(label):
-            if v == 1:
+            if v > 0 :
                 label_classes.append(classes[i])
         label_title = ' '.join(label_classes)
 
         # pred
-        if not use_fivecrop:
-            image=image.unsqueeze(0)
-        pred = mymodel(image).mean(0)
 
-        pred = (pred > 0).to(torch.int).tolist()
+        pred = model_out.tolist()
         pred_classes = []
         for i, v in enumerate(pred):
-            if v == 1:
+            if v > 0:
                 pred_classes.append(classes[i])
         pred_title = ' '.join(pred_classes)
 
