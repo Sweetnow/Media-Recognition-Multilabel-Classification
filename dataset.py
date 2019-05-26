@@ -46,20 +46,29 @@ class PascalVOCDataset(Dataset):
         images = []
         with open(path, 'r') as f:
             all_infos = list(map(lambda s: s[:-1].split(), f))
-            if train:
-                need_infos = list(
-                    filter(lambda l: l[0][:4] in PascalVOCDataset.train_prefix, all_infos))
-            else:
-                need_infos = list(
-                    filter(lambda l: l[0][:4] in PascalVOCDataset.test_prefix, all_infos))
-            images = list(map(lambda l: l[0], need_infos))
-            with torch.no_grad():
-                indice_one_hot = torch.zeros(
-                    (len(images), PascalVOCDataset.CLASSES), dtype=torch.float32)
-                for i in range(len(images)):
-                    indice = torch.LongTensor(
-                        list(map(int, need_infos[i][1:])))
-                    indice_one_hot[i].scatter_(0, indice, 1.)
+        if train:
+            need_infos = list(
+                filter(lambda l: l[0][:4] in PascalVOCDataset.train_prefix, all_infos))
+        else:
+            need_infos = list(
+                filter(lambda l: l[0][:4] in PascalVOCDataset.test_prefix, all_infos))
+        if train:
+            tmp = []
+            for l in need_infos:
+                if '0' in l:
+                    tmp.append(l)
+                else:
+                    tmp.append(l)
+                    tmp.append(l)
+            need_infos = tmp
+        images = list(map(lambda l: l[0], need_infos))
+        with torch.no_grad():
+            indice_one_hot = torch.zeros(
+                (len(images), PascalVOCDataset.CLASSES), dtype=torch.float32)
+            for i in range(len(images)):
+                indice = torch.LongTensor(
+                    list(map(int, need_infos[i][1:])))
+                indice_one_hot[i].scatter_(0, indice, 1.)
         return images, indice_one_hot
 
 
@@ -104,4 +113,5 @@ def get_dataset(path, use_augmentation, use_fivecrop):
 
 if __name__ == "__main__":
     train_dataset, test_dataset = get_dataset('./dataset', True, False)
+    print(len(train_dataset))
     print(test_dataset[0]['image'].shape)
