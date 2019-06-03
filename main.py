@@ -18,8 +18,8 @@ def parse_args():
                         help='root directory')
     parser.add_argument('--model', nargs='?', default='ResNet50',
                         help='Choose Model: ResNet18, ResNet34, ResNet50, DenseNet')
-    parser.add_argument('--frozen_layers', nargs='?', default='fc',
-                        help='Model frozen_layers')
+    parser.add_argument('--layers', nargs='?', default='fc',
+                        help='Model trained layers')
     parser.add_argument('--lr', nargs='?', type=int,
                         default=0.003, help='learning rate')
     parser.add_argument('--batch', nargs='?', type=int,

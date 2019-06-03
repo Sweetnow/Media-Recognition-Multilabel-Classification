@@ -35,7 +35,7 @@ def demo():
     device = torch.device('cuda')
     _, test_dataset = dataset.get_dataset('./dataset', False, use_fivecrop)
     mymodel = model.ResNet50('none').to(device)
-    mymodel.load('../model/ResNet50_15005716.pt')
+    mymodel.load('./model/ResNet50_15005716.pt')
     mymodel.eval()
 
     while True:
