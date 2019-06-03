@@ -53,6 +53,7 @@ def main():
     test_loader = DataLoader(test_dataset, args.batch, False,
                              num_workers=args.worker, pin_memory=True)
     if args.cuda:
+        torch.cuda.set_device(0)
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
