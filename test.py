@@ -57,10 +57,13 @@ def test(model, loader, device, use_fivecrop):
 
 
 if __name__ == "__main__":
+    torch.cuda.set_device(3)
     device = torch.device('cuda')
-    mymodel = model.ResNet50('none').to(device)
-    mymodel.load('./ResNet50_15005716.pt')
-    _, test_dataset = dataset.get_dataset('./dataset', False, False)
-    loader = DataLoader(test_dataset, 128, False,
-                        num_workers=4, pin_memory=True)
-    test(mymodel, loader, device, False)
+    mymodel = model.ResNet50('none')
+    mymodel.load('./ResNet50_bigdata_15005716.pt')
+    mymodel=mymodel.to(device)
+    FIVE=True
+    _, test_dataset = dataset.get_dataset('./dataset', False,FIVE)
+    loader = DataLoader(test_dataset, 32, False,
+                        num_workers=16, pin_memory=True)
+    test(mymodel, loader, device, FIVE)

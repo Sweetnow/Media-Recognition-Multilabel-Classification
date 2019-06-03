@@ -55,7 +55,7 @@ class DenseNet(Model):
     def __init__(self):
         super().__init__('DenseNet')
         self.model = tv.models.densenet121(True)
-        self.model.classifier = nn.Sequential(nn.Linear(1024, 20))
+        self.model.classifier = nn.Sequential(nn.Linear(9216, 20))
         self._freeze(1)
 
 
@@ -95,7 +95,7 @@ class ResNet34(Model):
 
 class ResNet50(Model):
     def __init__(self, frozen_layers):
-        super().__init__('ResNet50')
+        super().__init__('ResNet50_bigdata')
         self.model = tv.models.resnet50(True)
         self.model.fc = nn.Sequential(nn.Linear(2048, 20))
         self.model.avgpool = nn.AdaptiveAvgPool2d((1, 1))
