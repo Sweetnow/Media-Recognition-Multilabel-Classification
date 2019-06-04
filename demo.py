@@ -28,30 +28,36 @@ classes = ['person',
            'sofa',
            'tvmonitor']
 
+dataset_path = './dataset'
+use_fivecrop = True
+model_path = './model/ResNet50_15005716.pt'
+used_model = model.ResNet50
+
 
 def demo():
     # load dataset and model
-    use_fivecrop = True
+
     device = torch.device('cuda')
-    _, test_dataset = dataset.get_dataset('./dataset', False, use_fivecrop)
-    mymodel = model.ResNet50('none').to(device)
-    mymodel.load('./model/ResNet50_15005716.pt')
+    _, test_dataset = dataset.get_dataset(dataset_path, False, use_fivecrop)
+    mymodel = used_model('none').to(device)
+    mymodel.load(model_path)
     mymodel.eval()
 
     while True:
-        index=int(input('enter index: '))
+        index = int(input('enter index or exit(-1): '))
+        if index == -1:
+            break
         data = test_dataset[index]
         # process label
         image, label = data['image'].to(device), data['label'].to(device)
         if not use_fivecrop:
-            image=image.unsqueeze(0)
+            image = image.unsqueeze(0)
         model_out = mymodel(image).mean(0)
-
 
         label = label.tolist()
         label_classes = []
         for i, v in enumerate(label):
-            if v > 0 :
+            if v > 0:
                 label_classes.append(classes[i])
         label_title = ' '.join(label_classes)
 
